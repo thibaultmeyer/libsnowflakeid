@@ -1,11 +1,17 @@
 #include <stdlib.h>
 #include "libsnowflakeid.h"
 
-struct s_snowflakeid_generator_ctx *snowflakeid_initialize(const uint8_t instance_id) {
+struct s_snowflakeid_generator_ctx *snowflakeid_initialize(const uint8_t datacenter_id,
+                                                           const uint8_t worker_id) {
+    if (datacenter_id > 32 || worker_id > 32) {
+        return (NULL);
+    }
+
     struct s_snowflakeid_generator_ctx *ctx = malloc(sizeof(struct s_snowflakeid_generator_ctx));
     if (ctx != NULL) {
-        ctx->last_timestamp  = 0;
-        ctx->instance_id     = instance_id;
+        ctx->last_time_ms    = 0;
+        ctx->datacenter_id   = datacenter_id;
+        ctx->worker_id       = worker_id;
         ctx->sequence_number = 0;
     }
 
