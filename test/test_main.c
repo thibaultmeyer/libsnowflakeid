@@ -7,8 +7,8 @@
 
 static inline uint64_t get_current_time_ms(void) {
     struct timeval tv = {0};
-
     gettimeofday(&tv, NULL);
+
     return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
 
@@ -25,7 +25,6 @@ int main(const int argc, const char *const *argv) {
 
         uint64_t *id_array = malloc(sizeof(uint64_t) * max_value + 1);
         memset(id_array, 0, sizeof(uint64_t) * max_value + 1);
-
 
         uint64_t time_start = get_current_time_ms();
         for (int idx        = 0; idx < max_value; ++idx) {
