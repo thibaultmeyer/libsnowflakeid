@@ -35,6 +35,14 @@ int main(const int argc, const char *const *argv) {
         printf("END PERFORMANCE TEST  : %" PRIu64  "ms\n", time_stop - time_start);
 
         free(id_array);
+    } else if (argc > 1 && strcmp(argv[1], "SINGLE") == 0) {
+        uint64_t snowflakeid = snowflakeid_next_value(ctx);
+        printf("SINGLE: %" PRIu64 " (timestamp_ms: %" PRIu64 ", datacenter_id: %" PRIu8 ", worker_id: %" PRIu8 ", inc: %" PRIu16 ")\n",
+               snowflakeid,
+               (uint64_t) (snowflakeid >> TIMESTAMP_SHIFT),
+               (uint8_t) ((snowflakeid & 0x3E0000) >> DATACENTER_ID_SHIFT),
+               (uint8_t) ((snowflakeid & 0x1F000) >> WORKER_ID_SHIFT),
+               (uint16_t) (snowflakeid & 0xFFF));
     }
 
     snowflakeid_destroy(ctx);

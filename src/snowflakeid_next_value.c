@@ -35,7 +35,7 @@ uint64_t snowflakeid_next_value(s_snowflakeid_generator_ctx *const ctx) {
     uint16_t sequence_number = ctx->sequence_number;
     pthread_mutex_unlock(&ctx->sequence_number_mutex);
 
-    return ((current_time_ms << TIMESTAMP_LEFT_SHIFT)
+    return ((current_time_ms << TIMESTAMP_SHIFT)
             | (ctx->datacenter_id << DATACENTER_ID_SHIFT)
             | (ctx->worker_id << WORKER_ID_SHIFT)
             | sequence_number);
