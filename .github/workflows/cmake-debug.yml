@@ -46,6 +46,16 @@ jobs:
                 # Execute the build.  You can specify a specific target with "--target <NAME>"
                 run: cmake --build . --config $BUILD_TYPE
 
+            -   name: Test (Performance)
+                working-directory: ${{github.workspace}}/build
+                shell: bash
+                # Execute the build.  You can specify a specific target with "--target <NAME>"
+                run: |
+                    ./lib-snowflakeid-test PERFORMANCE 5000
+                    ./lib-snowflakeid-test PERFORMANCE 100000
+                    ./lib-snowflakeid-test PERFORMANCE 500000
+                    ./lib-snowflakeid-test PERFORMANCE 1000000
+
     build-macos:
         name: MacOS
 
@@ -79,3 +89,13 @@ jobs:
                 shell: bash
                 # Execute the build.  You can specify a specific target with "--target <NAME>"
                 run: cmake --build . --config $BUILD_TYPE
+
+            -   name: Test (Performance)
+                working-directory: ${{github.workspace}}/build
+                shell: bash
+                # Execute the build.  You can specify a specific target with "--target <NAME>"
+                run: |
+                    ./lib-snowflakeid-test PERFORMANCE 5000
+                    ./lib-snowflakeid-test PERFORMANCE 100000
+                    ./lib-snowflakeid-test PERFORMANCE 500000
+                    ./lib-snowflakeid-test PERFORMANCE 1000000
