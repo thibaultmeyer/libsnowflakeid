@@ -22,7 +22,7 @@ static inline uint64_t get_next_time_ms(const uint64_t *const not_until_time_ms)
 uint64_t snowflakeid_next_value(s_snowflakeid_generator_ctx *const ctx) {
     uint64_t current_time_ms = get_current_time_ms();
 
-    pthread_mutex_lock(&ctx->sequence_number_mutex);
+    pthread_mutex_lock(&ctx->internal_lock);
     if (ctx->last_time_ms == current_time_ms) {
         ctx->sequence_number = (ctx->sequence_number + 1) % SEQUENCE_MAX;
         if (ctx->sequence_number == 0) {
@@ -33,7 +33,7 @@ uint64_t snowflakeid_next_value(s_snowflakeid_generator_ctx *const ctx) {
     }
     ctx->last_time_ms        = current_time_ms;
     uint16_t sequence_number = ctx->sequence_number;
-    pthread_mutex_unlock(&ctx->sequence_number_mutex);
+    pthread_mutex_unlock(&ctx->internal_lock);
 
     return ((current_time_ms << TIMESTAMP_SHIFT)
             | (ctx->datacenter_id << DATACENTER_ID_SHIFT)

@@ -27,7 +27,7 @@ struct s_snowflakeid_generator_ctx {
     uint8_t         datacenter_id;
     uint8_t         worker_id;
     uint16_t        sequence_number;
-    pthread_mutex_t sequence_number_mutex;
+    pthread_mutex_t internal_lock;
 };
 
 /**
