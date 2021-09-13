@@ -13,9 +13,10 @@ static inline uint64_t get_current_time_ms(void) {
 }
 
 int main(const int argc, const char *const *argv) {
-    struct s_snowflakeid_generator_ctx *ctx = snowflakeid_initialize(5, 1);
+    enum e_snowflakeid_init_status     status;
+    struct s_snowflakeid_generator_ctx *ctx = snowflakeid_initialize(5, 1, &status);
     if (ctx == NULL) {
-        printf("Can't create CTX\n");
+        printf("Can't create CTX: %d\n", status);
         return (-1);
     }
 
@@ -39,9 +40,9 @@ int main(const int argc, const char *const *argv) {
         uint64_t snowflakeid = snowflakeid_next_value(ctx);
         printf("SINGLE: %" PRIu64 " (timestamp_ms: %" PRIu64 ", datacenter_id: %" PRIu8 ", worker_id: %" PRIu8 ", inc: %" PRIu16 ")\n",
                snowflakeid,
-               (uint64_t) (snowflakeid >> TIMESTAMP_SHIFT),
-               (uint8_t) ((snowflakeid & 0x3E0000) >> DATACENTER_ID_SHIFT),
-               (uint8_t) ((snowflakeid & 0x1F000) >> WORKER_ID_SHIFT),
+               (uint64_t) (snowflakeid >> SNOWFLAKEID_TIMESTAMP_SHIFT),
+               (uint8_t) ((snowflakeid & 0x3E0000) >> SNOWFLAKEID_DATACENTER_ID_SHIFT),
+               (uint8_t) ((snowflakeid & 0x1F000) >> SNOWFLAKEID_WORKER_ID_SHIFT),
                (uint16_t) (snowflakeid & 0xFFF));
     }
 

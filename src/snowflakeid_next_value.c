@@ -24,7 +24,7 @@ uint64_t snowflakeid_next_value(s_snowflakeid_generator_ctx *const ctx) {
 
     pthread_mutex_lock(&ctx->internal_lock);
     if (ctx->last_time_ms == current_time_ms) {
-        ctx->sequence_number = (ctx->sequence_number + 1) % SEQUENCE_MAX;
+        ctx->sequence_number = (ctx->sequence_number + 1) % SNOWFLAKEID_SEQUENCE_MAX;
         if (ctx->sequence_number == 0) {
             current_time_ms = get_next_time_ms(&ctx->last_time_ms);
         }
@@ -35,8 +35,8 @@ uint64_t snowflakeid_next_value(s_snowflakeid_generator_ctx *const ctx) {
     uint16_t sequence_number = ctx->sequence_number;
     pthread_mutex_unlock(&ctx->internal_lock);
 
-    return ((current_time_ms << TIMESTAMP_SHIFT)
-            | (ctx->datacenter_id << DATACENTER_ID_SHIFT)
-            | (ctx->worker_id << WORKER_ID_SHIFT)
+    return ((current_time_ms << SNOWFLAKEID_TIMESTAMP_SHIFT)
+            | (ctx->datacenter_id << SNOWFLAKEID_DATACENTER_ID_SHIFT)
+            | (ctx->worker_id << SNOWFLAKEID_WORKER_ID_SHIFT)
             | sequence_number);
 }
