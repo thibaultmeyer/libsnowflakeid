@@ -13,10 +13,10 @@ static inline uint64_t get_current_time_ms(void) {
 }
 
 int main(const int argc, const char *const *argv) {
-    enum e_snowflakeid_init_status     status;
-    struct s_snowflakeid_generator_ctx *ctx = snowflakeid_initialize(5, 1, &status);
+    enum e_snowflakeid_init_status     status_out;
+    struct s_snowflakeid_generator_ctx *ctx = snowflakeid_initialize(5, 1, &status_out);
     if (ctx == NULL) {
-        printf("Can't create CTX: %d\n", status);
+        printf("Can't create CTX: %d\n", status_out);
         return (-1);
     }
 
@@ -40,10 +40,10 @@ int main(const int argc, const char *const *argv) {
         uint64_t snowflakeid = snowflakeid_next_value(ctx);
         printf("SINGLE: %" PRIu64 " (timestamp_ms: %" PRIu64 ", datacenter_id: %" PRIu8 ", worker_id: %" PRIu8 ", inc: %" PRIu16 ")\n",
                snowflakeid,
-               (uint64_t) (snowflakeid >> SNOWFLAKEID_TIMESTAMP_SHIFT),
-               (uint8_t) ((snowflakeid & 0x3E0000) >> SNOWFLAKEID_DATACENTER_ID_SHIFT),
-               (uint8_t) ((snowflakeid & 0x1F000) >> SNOWFLAKEID_WORKER_ID_SHIFT),
-               (uint16_t) (snowflakeid & 0xFFF));
+               SNOWFLAGEID_GET_TIMESTAMP(snowflakeid),
+               SNOWFLAGEID_GET_DATACENTER_ID(snowflakeid),
+               SNOWFLAGEID_GET_WORKER_ID(snowflakeid),
+               SNOWFLAGEID_GET_SEQUENCE(snowflakeid));
     }
 
     snowflakeid_destroy(ctx);

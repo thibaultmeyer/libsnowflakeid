@@ -14,6 +14,11 @@ extern "C"
 # define SNOWFLAKEID_TIMESTAMP_SHIFT        (SNOWFLAKEID_SEQUENCE_BITS + SNOWFLAKEID_WORKER_ID_BITS + SNOWFLAKEID_DATACENTER_ID_BITS)
 # define SNOWFLAKEID_SEQUENCE_MAX           ((1 << SNOWFLAKEID_SEQUENCE_BITS) - 1)
 
+# define SNOWFLAGEID_GET_TIMESTAMP(snowflakeid)     ((uint64_t) (snowflakeid >> SNOWFLAKEID_TIMESTAMP_SHIFT))
+# define SNOWFLAGEID_GET_DATACENTER_ID(snowflakeid) ((uint8_t) ((snowflakeid & 0x3E0000) >> SNOWFLAKEID_DATACENTER_ID_SHIFT))
+# define SNOWFLAGEID_GET_WORKER_ID(snowflakeid)     ((uint8_t) ((snowflakeid & 0x1F000) >> SNOWFLAKEID_WORKER_ID_SHIFT))
+# define SNOWFLAGEID_GET_SEQUENCE(snowflakeid)      ((uint16_t) (snowflakeid & 0xFFF))
+
 # include <pthread.h>
 # include <stdint.h>
 
