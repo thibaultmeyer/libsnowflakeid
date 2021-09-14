@@ -93,19 +93,47 @@ jobs:
             -   name: Build
                 working-directory: ${{github.workspace}}/build
                 shell: bash
-                # Execute the build.  You can specify a specific target with "--target <NAME>"
                 run: cmake --build . --config $BUILD_TYPE
 
             -   name: Test
                 working-directory: ${{github.workspace}}/build
                 shell: bash
-                # Execute the build.  You can specify a specific target with "--target <NAME>"
                 run: ./lib-snowflakeid-test SINGLE
 
             -   name: Test (Performance)
                 working-directory: ${{github.workspace}}/build
                 shell: bash
-                # Execute the build.  You can specify a specific target with "--target <NAME>"
+                run: |
+                    ./lib-snowflakeid-test PERFORMANCE 5000
+                    ./lib-snowflakeid-test PERFORMANCE 100000
+                    ./lib-snowflakeid-test PERFORMANCE 500000
+                    ./lib-snowflakeid-test PERFORMANCE 1000000
+
+    build-windows:
+        name: Windows
+
+        runs-on: windows-latest
+
+        strategy:
+            matrix:
+                target_arch: [ amd64 ]
+
+        steps:
+            -   name: Clone repository
+                uses: actions/checkout@v2
+
+            -   name: Configure CMake
+                run: mkdir build && cd build && cmake ..
+
+            -   name: Build
+                run: cmake --build build --config Debug
+
+            -   name: Test
+                working-directory: ${{github.workspace}}/build/Debug
+                run: ./lib-snowflakeid-test.exe SINGLE
+
+            -   name: Test (Performance)
+                working-directory: ${{github.workspace}}/build/Debug
                 run: |
                     ./lib-snowflakeid-test PERFORMANCE 5000
                     ./lib-snowflakeid-test PERFORMANCE 100000

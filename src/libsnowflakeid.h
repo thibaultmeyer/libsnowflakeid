@@ -20,6 +20,7 @@ extern "C"
 # define SNOWFLAGEID_GET_SEQUENCE(snowflakeid)      ((uint16_t) (snowflakeid & 0xFFF))
 
 # ifdef _WIN32
+#  define WIN32_LEAN_AND_MEAN
 
 #  include <Windows.h>
 
