@@ -24,7 +24,12 @@ struct s_snowflakeid_generator_ctx *snowflakeid_initialize(const uint8_t datacen
     }
 
     // Initialize internal lock
+# ifdef USE_WINDOWS_MUTEX
+    ctx->internal_lock = CreateMutex(NULL, FALSE, NULL);
+    if (ctx->internal_lock == NULL) {
+#else
     if (pthread_mutex_init(&ctx->internal_lock, PTHREAD_MUTEX_NORMAL) != 0) {
+#endif
         free(ctx);
 
         if (status_out != NULL) {

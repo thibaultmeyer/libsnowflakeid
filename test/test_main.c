@@ -2,8 +2,25 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/time.h>
 #include "../src/libsnowflakeid.h"
+
+# ifdef _WIN32
+static inline uint64_t get_current_time_ms(void) {
+    static const ULONGLONG epoch_offset_us = 11644473600000000ULL; // Microseconds betweeen Jan 1,1601 and Jan 1,1970
+    FILETIME               filetime; // Representing the number of 100-nanosecond intervals since January 1, 1601 00:00 UTC
+    ULARGE_INTEGER         x;
+
+#if _WIN32_WINNT >= _WIN32_WINNT_WIN8
+    GetSystemTimePreciseAsFileTime(&filetime);
+#else
+    GetSystemTimeAsFileTime(&filetime);
+#endif
+    x.LowPart = filetime.dwLowDateTime;
+    x.HighPart = filetime.dwHighDateTime;
+
+    return ((x.QuadPart / 10) - epoch_offset_us) / 1000;
+}
+#else
 
 static inline uint64_t get_current_time_ms(void) {
     struct timeval tv = {0};
@@ -11,6 +28,8 @@ static inline uint64_t get_current_time_ms(void) {
 
     return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
+
+#endif
 
 int main(const int argc, const char *const *argv) {
     enum e_snowflakeid_init_status     status_out;

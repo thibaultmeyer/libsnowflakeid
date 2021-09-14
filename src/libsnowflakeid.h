@@ -19,7 +19,29 @@ extern "C"
 # define SNOWFLAGEID_GET_WORKER_ID(snowflakeid)     ((uint8_t) ((snowflakeid & 0x1F000) >> SNOWFLAKEID_WORKER_ID_SHIFT))
 # define SNOWFLAGEID_GET_SEQUENCE(snowflakeid)      ((uint16_t) (snowflakeid & 0xFFF))
 
-# include <pthread.h>
+# ifdef _WIN32
+
+#  include <Windows.h>
+
+# endif
+
+# ifdef USE_WINDOWS_MUTEX
+
+#  define SNOWFLAKEID_LOCK_WAIT_FOR(lock_instance)  WaitForSingleObject(lock_instance, INFINITE)
+#  define SNOWFLAKEID_LOCK_RELEASE(lock_instance)   ReleaseMutex(lock_instance)
+#  define SNOWFLAKEID_LOCK_DESTROY(lock_instance)   CloseHandle(lock_instance)
+typedef HANDLE snowflakeid_lock_t;
+# else
+
+#  include <pthread.h>
+#  include <sys/time.h>
+
+#  define SNOWFLAKEID_LOCK_WAIT_FOR(lock_instance)  pthread_mutex_lock(&lock_instance)
+#  define SNOWFLAKEID_LOCK_RELEASE(lock_instance)   pthread_mutex_unlock(&lock_instance)
+#  define SNOWFLAKEID_LOCK_DESTROY(lock_instance)   pthread_mutex_destroy(&lock_instance)
+typedef pthread_mutex_t snowflakeid_lock_t;
+# endif
+
 # include <stdint.h>
 
 /**
@@ -30,18 +52,18 @@ typedef enum e_snowflakeid_init_status {
     SNOWFLAKEID_INIT_ERROR_INVALID_ARGUMENT   = 1,
     SNOWFLAKEID_INIT_ERROR_MEMORY_ALLOCATION  = 2,
     SNOWFLAKEID_INIT_ERROR_LOCK_INITIALIZATIO = 3
-} e_snowflakeid_init_status;
+}                       e_snowflakeid_init_status;
 
 /**
  * Snowflake ID generator context.
  */
 typedef struct s_snowflakeid_generator_ctx {
-    uint64_t        last_time_ms;
-    uint8_t         datacenter_id;
-    uint8_t         worker_id;
-    uint16_t        sequence_number;
-    pthread_mutex_t internal_lock;
-} s_snowflakeid_generator_ctx;
+    uint64_t           last_time_ms;
+    uint8_t            datacenter_id;
+    uint8_t            worker_id;
+    uint16_t           sequence_number;
+    snowflakeid_lock_t internal_lock;
+}                       s_snowflakeid_generator_ctx;
 
 /**
  * Destroys the given Snowflake ID generator context.

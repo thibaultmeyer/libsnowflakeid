@@ -3,7 +3,7 @@
 
 void snowflakeid_destroy(s_snowflakeid_generator_ctx *const ctx) {
     if (ctx != NULL) {
-        pthread_mutex_destroy(&ctx->internal_lock);
+        SNOWFLAKEID_LOCK_DESTROY(ctx->internal_lock);
         free(ctx);
     }
 }
