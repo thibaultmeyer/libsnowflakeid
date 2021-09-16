@@ -40,17 +40,17 @@ SET(TEST_FILES ${TEST_FILES}
 ADD_LIBRARY(lib-snowflakeid-obj OBJECT ${SOURCE_FILES})
 ADD_LIBRARY(lib-snowflakeid-static STATIC $<TARGET_OBJECTS:lib-snowflakeid-obj>)
 ADD_LIBRARY(lib-snowflakeid-shared SHARED $<TARGET_OBJECTS:lib-snowflakeid-obj>)
-IF (!WIN32)
+IF (NOT MSVC)
     SET_TARGET_PROPERTIES(lib-snowflakeid-static PROPERTIES OUTPUT_NAME "snowflakeid")
-ENDIF (!WIN32)
+ENDIF (NOT MSVC)
 SET_TARGET_PROPERTIES(lib-snowflakeid-shared PROPERTIES OUTPUT_NAME "snowflakeid")
 
 # Binary (Unit Tests)
 ADD_EXECUTABLE(lib-snowflakeid-test $<TARGET_OBJECTS:lib-snowflakeid-obj> ${TEST_FILES})
 
 # Install
-IF (!WIN32)
+IF (NOT MSVC)
     INSTALL(TARGETS lib-snowflakeid-static ARCHIVE DESTINATION lib LIBRARY DESTINATION lib RUNTIME DESTINATION bin)
-ENDIF (!WIN32)
+ENDIF (NOT MSVC)
 INSTALL(TARGETS lib-snowflakeid-shared ARCHIVE DESTINATION lib LIBRARY DESTINATION lib RUNTIME DESTINATION bin)
 INSTALL(DIRECTORY ${CMAKE_SOURCE_DIR}/src/ DESTINATION include FILES_MATCHING PATTERN "*.h*")

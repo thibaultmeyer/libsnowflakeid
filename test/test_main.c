@@ -52,7 +52,7 @@ int main(const int argc, const char *const *argv) {
         }
         uint64_t time_stop  = get_current_time_ms();
 
-        printf("END PERFORMANCE TEST  : %" PRIu64  "ms\n", time_stop - time_start);
+        printf("END PERFORMANCE TEST  : %" PRIu64 "ms\n", time_stop - time_start);
 
         free(id_array);
     } else if (argc > 1 && strcmp(argv[1], "SINGLE") == 0) {
