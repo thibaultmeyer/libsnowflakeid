@@ -4,7 +4,7 @@
 #include <string.h>
 #include "../src/libsnowflakeid.h"
 
-# ifdef _WIN32
+#ifdef _WIN32
 static inline uint64_t get_current_time_ms(void) {
     static const ULONGLONG epoch_offset_us = 11644473600000000ULL; // Microseconds betweeen Jan 1,1601 and Jan 1,1970
     FILETIME               filetime; // Representing the number of 100-nanosecond intervals since January 1, 1601 00:00 UTC
