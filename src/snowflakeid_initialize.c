@@ -28,7 +28,7 @@ struct s_snowflakeid_generator_ctx *snowflakeid_initialize(const uint8_t datacen
     ctx->internal_lock = CreateMutex(NULL, FALSE, NULL);
     if (ctx->internal_lock == NULL) {
 #else
-    if (pthread_mutex_init(&ctx->internal_lock, PTHREAD_MUTEX_NORMAL) != 0) {
+    if (pthread_mutex_init(&ctx->internal_lock, NULL) != 0) {
 #endif
         free(ctx);
 
