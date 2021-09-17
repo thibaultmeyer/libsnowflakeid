@@ -1,6 +1,7 @@
 .idea/
-cmake-build-debug
-cmake-build-release
-out/
-CMakeSettings.json
 .vs/
+cmake-build-debug/
+cmake-build-release/
+CMakeSettings.json
+out/
+src/version.h

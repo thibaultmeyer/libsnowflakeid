@@ -40,7 +40,8 @@ int main(const int argc, const char *const *argv) {
     }
 
     if (argc > 2 && strcmp(argv[1], "PERFORMANCE") == 0) {
-        int max_value = atoi(argv[2]);
+        int max_value = (int) strtol(argv[2], NULL, 10);
+
         printf("START PERFORMANCE TEST: %d\n", max_value);
 
         uint64_t *id_array = malloc(sizeof(uint64_t) * max_value + 1);
@@ -51,11 +52,12 @@ int main(const int argc, const char *const *argv) {
             id_array[idx] = snowflakeid_next_value(ctx);
         }
         uint64_t time_stop  = get_current_time_ms();
-
         printf("END PERFORMANCE TEST  : %" PRIu64 "ms\n", time_stop - time_start);
 
         free(id_array);
     } else if (argc > 1 && strcmp(argv[1], "SINGLE") == 0) {
+        printf("libsnowflakeid version %s (%d)\n", snowflakeid_get_version_as_str(), snowflakeid_get_version_as_int());
+
         uint64_t snowflakeid = snowflakeid_next_value(ctx);
         printf("SINGLE: %" PRIu64 " (timestamp_ms: %" PRIu64 ", datacenter_id: %" PRIu8 ", worker_id: %" PRIu8 ", inc: %" PRIu16 ")\n",
                snowflakeid,

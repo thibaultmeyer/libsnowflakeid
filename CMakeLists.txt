@@ -11,6 +11,11 @@ ENDIF (MSVC)
 SET(CMAKE_CXX_FLAGS_DEBUG "-g")
 SET(CMAKE_CXX_FLAGS_RELEASE "-O2")
 
+# Configure version.h file
+SET(LIBSNOWFLAKEID_VERSION_STRING "1.0.0")
+SET(LIBSNOWFLAKEID_VERSION_NUMBER "100")
+CONFIGURE_FILE(${CMAKE_SOURCE_DIR}/res/version.h.template ${CMAKE_SOURCE_DIR}/src/version.h)
+
 # Display build type
 IF (NOT CMAKE_BUILD_TYPE)
     MESSAGE(STATUS "Build type: -")
@@ -29,6 +34,8 @@ ENDIF (CMAKE_USE_PTHREADS_INIT)
 # Source Files
 SET(SOURCE_FILES ${SOURCE_FILES}
         src/snowflakeid_destroy.c
+        src/snowflakeid_get_version_as_int.c
+        src/snowflakeid_get_version_as_str.c
         src/snowflakeid_initialize.c
         src/snowflakeid_next_value.c)
 

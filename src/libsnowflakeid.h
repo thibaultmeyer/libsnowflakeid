@@ -74,6 +74,20 @@ typedef struct s_snowflakeid_generator_ctx {
 void snowflakeid_destroy(struct s_snowflakeid_generator_ctx *ctx);
 
 /**
+ * Returns the SnowflakeID library version as a number.
+ *
+ * @return the SnowflakeID library version as a number (ie: 100)
+ */
+int snowflakeid_get_version_as_int(void);
+
+/**
+ * Returns the SnowflakeID library version as a string.
+ *
+ * @return the SnowflakeID library version as a string (ie: 1.0.0)
+ */
+const char *snowflakeid_get_version_as_str(void);
+
+/**
  * Initialize Snowflake ID generator context.
  *
  * @param datacenter_id [IN] The Datacenter ID (Max. value = 32)
