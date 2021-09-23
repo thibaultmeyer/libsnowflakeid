@@ -5,7 +5,7 @@ struct s_snowflakeid_generator_ctx *snowflakeid_initialize(const uint8_t datacen
                                                            const uint8_t worker_id,
                                                            enum e_snowflakeid_init_status *status_out) {
     // Verify datacenter_id and worker_id
-    if (datacenter_id > 32 || worker_id > 32) {
+    if (datacenter_id > 31 || worker_id > 31) {
         if (status_out != NULL) {
             *status_out = SNOWFLAKEID_INIT_ERROR_INVALID_ARGUMENT;
         }
