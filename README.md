@@ -25,7 +25,7 @@ int main(const int argc, const char *const *argv) {
     struct s_snowflakeid_generator_ctx *ctx = snowflakeid_initialize(datacenter_id, worker_id, &status_out);
     
     if (status_out == SNOWFLAKEID_INIT_SUCCESS) {
-        uint64_t = snowflakeid_next_value(ctx);
+        uint64_t id = snowflakeid_next_value(ctx);
         
         snowflakeid_destroy(ctx);
     }
