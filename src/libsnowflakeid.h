@@ -60,6 +60,7 @@ typedef enum e_snowflakeid_init_status {
  */
 typedef struct s_snowflakeid_generator_ctx {
     uint64_t           last_time_ms;
+    uint64_t           offset_time_ms;
     uint8_t            datacenter_id;
     uint8_t            worker_id;
     uint16_t           sequence_number;
@@ -76,27 +77,29 @@ void snowflakeid_destroy(struct s_snowflakeid_generator_ctx *ctx);
 /**
  * Returns the SnowflakeID library version as a number.
  *
- * @return the SnowflakeID library version as a number (ie: 100)
+ * @return The SnowflakeID library version as a number (ie: 100)
  */
 int snowflakeid_get_version_as_int(void);
 
 /**
  * Returns the SnowflakeID library version as a string.
  *
- * @return the SnowflakeID library version as a string (ie: 1.0.0)
+ * @return The SnowflakeID library version as a string (ie: 1.0.0)
  */
 const char *snowflakeid_get_version_as_str(void);
 
 /**
  * Initialize Snowflake ID generator context.
  *
- * @param datacenter_id [IN] The Datacenter ID (Max. value = 32)
- * @param worker_id     [IN] The Worker ID (Max. value = 32)
- * @param status_out    [OUT] The operation status (ie: SNOWFLAKEID_INIT_SUCCESS)
+ * @param datacenter_id  [IN] The Datacenter ID (Max. value = 32)
+ * @param worker_id      [IN] The Worker ID (Max. value = 32)
+ * @param offset_time_ms [IN] Offset in milliseconds to be subtracted from the real "current time"
+ * @param status_out     [OUT] The operation status (ie: SNOWFLAKEID_INIT_SUCCESS)
  * @return Initialized Snowflake ID generator context, or NULL in case of error
  */
 struct s_snowflakeid_generator_ctx *snowflakeid_initialize(uint8_t datacenter_id,
                                                            uint8_t worker_id,
+                                                           uint64_t offset_time_ms,
                                                            enum e_snowflakeid_init_status *status_out);
 
 /**

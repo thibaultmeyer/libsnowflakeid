@@ -4,6 +4,10 @@
 #include <string.h>
 #include "../src/libsnowflakeid.h"
 
+#define DATACENTER_ID_VALUE     5
+#define WORKER_ID_VALUE         1
+#define OFFSET_TIME_MS_VALUE    0
+
 #ifdef _WIN32
 static inline uint64_t get_current_time_ms(void) {
     static const ULONGLONG epoch_offset_us = 116444736000000000ULL;
@@ -33,7 +37,12 @@ static inline uint64_t get_current_time_ms(void) {
 
 int main(const int argc, const char *const *argv) {
     enum e_snowflakeid_init_status     status_out;
-    struct s_snowflakeid_generator_ctx *ctx = snowflakeid_initialize(5, 1, &status_out);
+    struct s_snowflakeid_generator_ctx *ctx = snowflakeid_initialize(
+            DATACENTER_ID_VALUE,
+            WORKER_ID_VALUE,
+            OFFSET_TIME_MS_VALUE,
+            &status_out);
+
     if (ctx == NULL) {
         printf("Can't create CTX: %d\n", status_out);
         return (-1);
