@@ -3,6 +3,7 @@
 
 struct s_snowflakeid_generator_ctx *snowflakeid_initialize(const uint8_t datacenter_id,
                                                            const uint8_t worker_id,
+                                                           const uint64_t offset_time_ms,
                                                            enum e_snowflakeid_init_status *status_out) {
     // Verify datacenter_id and worker_id
     if (datacenter_id > 31 || worker_id > 31) {
@@ -41,6 +42,7 @@ struct s_snowflakeid_generator_ctx *snowflakeid_initialize(const uint8_t datacen
 
     // Configure ctx
     ctx->last_time_ms    = 0;
+    ctx->offset_time_ms  = offset_time_ms;
     ctx->datacenter_id   = datacenter_id;
     ctx->worker_id       = worker_id;
     ctx->sequence_number = 0;
