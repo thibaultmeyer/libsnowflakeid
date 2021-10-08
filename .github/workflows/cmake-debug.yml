@@ -46,11 +46,11 @@ jobs:
                 # Execute the build.  You can specify a specific target with "--target <NAME>"
                 run: cmake --build . --config $BUILD_TYPE
 
-            -   name: Test
+            -   name: Test (With Valgrind)
                 working-directory: ${{github.workspace}}/build
                 shell: bash
                 # Execute the build.  You can specify a specific target with "--target <NAME>"
-                run: ./lib-snowflakeid-test SINGLE
+                run: VALGRIND_OPTS='--leak-check=full --leak-resolution=med --track-origins=yes --show-leak-kinds=all --vgdb=no' valgrind ./lib-snowflakeid-test SINGLE
 
             -   name: Test (Performance)
                 working-directory: ${{github.workspace}}/build
