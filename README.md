@@ -1,6 +1,6 @@
 # libsnowflakeid
 
-[![Latest release](https://img.shields.io/badge/latest_release-1.1.0-orange.svg)](https://github.com/thibaultmeyer/libsnowflakeid/releases)
+[![Latest release](https://img.shields.io/badge/latest_release-1.2.0-orange.svg)](https://github.com/thibaultmeyer/libsnowflakeid/releases)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/thibaultmeyer/libsnowflakeid/blob/master/LICENSE)
 [![CodeFactor](https://www.codefactor.io/repository/github/thibaultmeyer/libsnowflakeid/badge)](https://www.codefactor.io/repository/github/thibaultmeyer/libsnowflakeid)
 
@@ -11,15 +11,18 @@ A tiny and portable library to generate Snowflake IDs.
 To compile and install this project, you must ensure that make, cmake, gcc or
 clang or MSVC are being correctly installed.
 
-    #> mkdir cmake-build-release
-    #> cd cmake-build-release
-    #> cmake -DCMAKE_BUILD_TYPE=Release ..
-    #> make
-    #> make install
-
+```bash
+#> mkdir cmake-build-release
+#> cd cmake-build-release
+#> cmake -DCMAKE_BUILD_TYPE=Release ..
+#> make
+#> make install
+```
 
 ## Usage
 ```c
+#include <snowflakeid.h>
+
 int main(const int argc, const char *const *argv) {
     enum e_snowflakeid_init_status     status_out;
     struct s_snowflakeid_generator_ctx *ctx = snowflakeid_initialize(
@@ -36,6 +39,10 @@ int main(const int argc, const char *const *argv) {
     
     return (0);
 }
+```
+
+```bash
+#> cc example.c -lsnowflakeid
 ```
 
 

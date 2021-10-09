@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include "libsnowflakeid.h"
+#include "snowflakeid.h"
 
 struct s_snowflakeid_generator_ctx *snowflakeid_initialize(const uint8_t datacenter_id,
                                                            const uint8_t worker_id,

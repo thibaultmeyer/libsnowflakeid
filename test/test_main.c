@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../src/libsnowflakeid.h"
+#include "snowflakeid.h"
 
 #define DATACENTER_ID_VALUE     5
 #define WORKER_ID_VALUE         1
