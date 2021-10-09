@@ -1,0 +1,1 @@
+A tiny, fast, and portable library to generate Snowflake IDs
