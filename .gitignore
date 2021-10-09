@@ -3,5 +3,5 @@
 CMakeSettings.json
 cmake-build-debug/
 cmake-build-release/
-inc/version.h2
+inc/version.h
 out/
