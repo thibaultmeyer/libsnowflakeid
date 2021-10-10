@@ -1,0 +1,143 @@
+name: Package
+
+on:
+    release:
+        types: [published]
+
+env:
+    BUILD_TYPE: Release
+
+jobs:
+    build-linux-ubuntu:
+        name: Ubuntu
+
+        runs-on: ubuntu-latest
+
+        steps:
+            -   name: Clone repository
+                uses: actions/checkout@v2
+
+            -   name: Create Build Environment
+                run: |
+                    sudo apt-get update
+                    sudo apt-get install jq      \
+                        gcc-aarch64-linux-gnu    \
+                        gcc-s390x-linux-gnu      \
+                        gcc-s390x-linux-gnu      \
+                        gcc-arm-linux-gnueabi    \
+                        gcc-arm-linux-gnueabihf
+
+            -   name: DEB (x86_64)
+                shell: bash
+                run: |
+                    mkdir -p ${{github.workspace}}/build-release-x86_64
+                    cd ${{github.workspace}}/build-release-x86_64
+                    cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE  -DBUILD_DEB=YES
+                    cmake --build . --config $BUILD_TYPE
+                    make package
+
+            -   name: DEB (aarch64)
+                shell: bash
+                run: |
+                    mkdir -p ${{github.workspace}}/build-release-aarch64
+                    cd ${{github.workspace}}/build-release-aarch64
+                    cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE  -DBUILD_DEB=YES -DARCHITECTURE=aarch64 -DCMAKE_C_COMPILER=/usr/bin/aarch64-linux-gnu-gcc
+                    cmake --build . --config $BUILD_TYPE
+                    make package
+
+            -   name: DEB (s390x)
+                shell: bash
+                run: |
+                    mkdir -p ${{github.workspace}}/build-release-s390x
+                    cd ${{github.workspace}}/build-release-s390x
+                    cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE  -DBUILD_DEB=YES -DARCHITECTURE=s390x -DCMAKE_C_COMPILER=/usr/bin/s390x-linux-gnu-gcc
+                    cmake --build . --config $BUILD_TYPE
+                    make package
+
+            -   name: DEB (armel)
+                shell: bash
+                run: |
+                    mkdir -p ${{github.workspace}}/build-release-armel
+                    cd ${{github.workspace}}/build-release-armel
+                    cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE  -DBUILD_DEB=YES -DARCHITECTURE=armel -DCMAKE_C_COMPILER=/usr/bin/arm-linux-gnueabi-gcc
+                    cmake --build . --config $BUILD_TYPE
+                    make package
+
+            -   name: DEB (armhf)
+                shell: bash
+                run: |
+                    mkdir -p ${{github.workspace}}/build-release-armhf
+                    cd ${{github.workspace}}/build-release-armhf
+                    cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_DEB=YES -DARCHITECTURE=armhf -DCMAKE_C_COMPILER=/usr/bin/arm-linux-gnueabihf-gcc
+                    cmake --build . --config $BUILD_TYPE
+                    make package
+
+            -   name: Upload Generated DEB files to Release
+                shell: bash
+                run: |
+                    export RELEASE_ID=`curl -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" https://api.github.com/repos/thibaultmeyer/libsnowflakeid/releases | jq  '.[].id' | head -n1`
+
+                    export FILE=`ls ${{github.workspace}}/build-release-x86_64/*.deb`
+                    export FILE_BASENAME=`basename $FILE`
+                    export FILE_SIZE=`find $FILE -printf "%s"`
+                    curl --request POST -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" -H "Content-Type: application/octet-stream" -H "Content-Length: $FILE_SIZE" \
+                        --data-binary @$FILE "https://uploads.github.com/repos/thibaultmeyer/libsnowflakeid/releases/$RELEASE_ID/assets?name=$FILE_BASENAME"
+
+                    export FILE=`ls ${{github.workspace}}/build-release-aarch64/*.deb`
+                    export FILE_BASENAME=`basename $FILE`
+                    export FILE_SIZE=`find $FILE -printf "%s"`
+                    curl --request POST -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" -H "Content-Type: application/octet-stream" -H "Content-Length: $FILE_SIZE" \
+                        --data-binary @$FILE "https://uploads.github.com/repos/thibaultmeyer/libsnowflakeid/releases/$RELEASE_ID/assets?name=$FILE_BASENAME"
+
+                    export FILE=`ls ${{github.workspace}}/build-release-s390x/*.deb`
+                    export FILE_BASENAME=`basename $FILE`
+                    export FILE_SIZE=`find $FILE -printf "%s"`
+                    curl --request POST -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" -H "Content-Type: application/octet-stream" -H "Content-Length: $FILE_SIZE" \
+                        --data-binary @$FILE "https://uploads.github.com/repos/thibaultmeyer/libsnowflakeid/releases/$RELEASE_ID/assets?name=$FILE_BASENAME"
+
+                    export FILE=`ls ${{github.workspace}}/build-release-armel/*.deb`
+                    export FILE_BASENAME=`basename $FILE`
+                    export FILE_SIZE=`find $FILE -printf "%s"`
+                    curl --request POST -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" -H "Content-Type: application/octet-stream" -H "Content-Length: $FILE_SIZE" \
+                        --data-binary @$FILE "https://uploads.github.com/repos/thibaultmeyer/libsnowflakeid/releases/$RELEASE_ID/assets?name=$FILE_BASENAME"
+
+                    export FILE=`ls ${{github.workspace}}/build-release-armhf/*.deb`
+                    export FILE_BASENAME=`basename $FILE`
+                    export FILE_SIZE=`find $FILE -printf "%s"`
+                    curl --request POST -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" -H "Content-Type: application/octet-stream" -H "Content-Length: $FILE_SIZE" \
+                        --data-binary @$FILE "https://uploads.github.com/repos/thibaultmeyer/libsnowflakeid/releases/$RELEASE_ID/assets?name=$FILE_BASENAME"
+
+    build-linux-centos:
+        name: CentOS
+
+        runs-on: ubuntu-latest
+        container: 'centos:latest'
+
+        steps:
+            -   name: Clone repository
+                uses: actions/checkout@v2
+
+            -   name: Create Build Environment
+                run: |
+                    dnf -y group install "Development Tools"
+                    dnf -y install jq gcc cmake
+
+            -   name: RPM (x86_64)
+                shell: bash
+                run: |
+                    mkdir -p ${{github.workspace}}/build-release-x86_64
+                    cd ${{github.workspace}}/build-release-x86_64
+                    cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_RPM=YES
+                    cmake --build . --config $BUILD_TYPE
+                    make package
+
+            -   name: Upload Generated RPM file to Release
+                shell: bash
+                run: |
+                    export RELEASE_ID=`curl -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" https://api.github.com/repos/thibaultmeyer/libsnowflakeid/releases | jq  '.[].id' | head -n1`
+
+                    export FILE=`ls ${{github.workspace}}/build-release-x86_64/*.rpm`
+                    export FILE_BASENAME=`basename $FILE`
+                    export FILE_SIZE=`find $FILE -printf "%s"`
+                    curl --request POST -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" -H "Content-Type: application/octet-stream" -H "Content-Length: $FILE_SIZE" \
+                        --data-binary @$FILE "https://uploads.github.com/repos/thibaultmeyer/libsnowflakeid/releases/$RELEASE_ID/assets?name=$FILE_BASENAME"
