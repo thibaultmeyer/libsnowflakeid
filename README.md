@@ -1,6 +1,6 @@
 # libsnowflakeid
 
-[![Latest release](https://img.shields.io/badge/latest_release-1.2.0-orange.svg)](https://github.com/thibaultmeyer/libsnowflakeid/releases)
+[![Latest release](https://img.shields.io/badge/latest_release-1.3.0-orange.svg)](https://github.com/thibaultmeyer/libsnowflakeid/releases)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/thibaultmeyer/libsnowflakeid/blob/master/LICENSE)
 [![CodeFactor](https://www.codefactor.io/repository/github/thibaultmeyer/libsnowflakeid/badge)](https://www.codefactor.io/repository/github/thibaultmeyer/libsnowflakeid)
 [![Repository size](https://img.shields.io/github/repo-size/thibaultmeyer/libsnowflakeid.svg?logo=git)](https://github.com/thibaultmeyer/libsnowflakeid)

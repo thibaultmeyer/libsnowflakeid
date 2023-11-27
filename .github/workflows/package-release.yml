@@ -108,10 +108,10 @@ jobs:
                         --data-binary @$FILE "https://uploads.github.com/repos/thibaultmeyer/libsnowflakeid/releases/$RELEASE_ID/assets?name=$FILE_BASENAME"
 
     build-linux-centos:
-        name: CentOS
+        name: AlmaLinux
 
         runs-on: ubuntu-latest
-        container: 'centos:latest'
+        container: 'almalinux:latest'
 
         steps:
             -   name: Clone repository
