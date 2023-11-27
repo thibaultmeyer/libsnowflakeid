@@ -49,10 +49,10 @@ typedef pthread_mutex_t snowflakeid_lock_t;
  * Result value used in the function "snowflakeid_initialize".
  */
 typedef enum e_snowflakeid_init_status {
-    SNOWFLAKEID_INIT_SUCCESS                  = 0,
-    SNOWFLAKEID_INIT_ERROR_INVALID_ARGUMENT   = 1,
-    SNOWFLAKEID_INIT_ERROR_MEMORY_ALLOCATION  = 2,
-    SNOWFLAKEID_INIT_ERROR_LOCK_INITIALIZATIO = 3
+    SNOWFLAKEID_INIT_SUCCESS                   = 0,
+    SNOWFLAKEID_INIT_ERROR_INVALID_ARGUMENT    = 1,
+    SNOWFLAKEID_INIT_ERROR_MEMORY_ALLOCATION   = 2,
+    SNOWFLAKEID_INIT_ERROR_LOCK_INITIALIZATION = 3
 }                       e_snowflakeid_init_status;
 
 /**

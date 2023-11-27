@@ -34,7 +34,7 @@ struct s_snowflakeid_generator_ctx *snowflakeid_initialize(const uint8_t datacen
         free(ctx);
 
         if (status_out != NULL) {
-            *status_out = SNOWFLAKEID_INIT_ERROR_LOCK_INITIALIZATIO;
+            *status_out = SNOWFLAKEID_INIT_ERROR_LOCK_INITIALIZATION;
         }
 
         return (NULL);
